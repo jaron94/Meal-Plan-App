@@ -1,0 +1,58 @@
+---
+output: pdf_document
+header-includes:
+  - \usepackage{booktabs}
+  - \usepackage{longtable}
+  - \usepackage{array}
+  - \usepackage{multirow}
+  - \usepackage{wrapfig}
+  - \usepackage{float}
+  - \usepackage{colortbl}
+  - \usepackage{pdflscape}
+  - \usepackage{tabu}
+  - \usepackage{threeparttable}
+  - \usepackage{threeparttablex}
+  - \usepackage[normalem]{ulem}
+  - \usepackage[normalem]{ulem}
+  - \usepackage[utf8]{inputenc}
+  - \usepackage{makecell}
+  - \usepackage{xcolor}
+  - \usepackage[font={Large,bf}, labelformat=empty, skip=20pt]{caption}
+  - \usepackage{floatpag}
+  - \floatpagestyle{empty}
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(kableExtra)
+library(knitr)
+library(tidyverse)
+```
+
+
+\pagenumbering{gobble}
+
+```{r}
+col1 <- sl$Item[1:ceiling(nrow(sl)/2)]
+col2 <- sl$Item[(ceiling(nrow(sl)/2)+1):nrow(sl)]
+if(nrow(sl) %% 2 != 0) {
+  col2 <- c(col2, "")
+}
+tab <- tibble("1" = col1, "2" = col2)
+tab %>%
+  kable(format = "latex", align = "c", booktabs = T, caption = "Shopping List")
+
+```
+
+```{r}
+names(mp)[1] <- input$start_date
+mp %>%
+  kable(format = "latex", escape = F, align = "c", caption = "Meal Plan") %>%
+  kable_styling(latex_options = "scale_down", font_size = 12) %>%
+  column_spec(1, border_left = T, bold = T) %>%
+  column_spec(8, border_right = T) %>%
+  row_spec(0, bold = T) %>%
+  landscape()
+  
+```
